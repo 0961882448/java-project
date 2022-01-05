@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import utilities.DBConnection;
 
 import java.awt.GridBagConstraints;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class formTrangChu extends JFrame {
 	private JPanel contentPane;
 	private final JSeparator separator = new JSeparator();
 	private JPanel panel;
-	private JPanel panelChinh, currentPanel;
+	private JPanel panelChinh;
 	GridBagConstraints c;
 
 	/**
@@ -103,14 +104,16 @@ public class formTrangChu extends JFrame {
 		
 		
 		JButton btnBan = new JButton("BÀN");
+		btnBan.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnBan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				
 				panel.getParent().remove(panelChinh);				
 				panel.getParent().revalidate();		
 				try {
-					
-					panel.getParent().add(new ban());	
+					panelChinh = new ban(); 
+					panel.getParent().add(panelChinh);	
 					
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
@@ -125,6 +128,7 @@ public class formTrangChu extends JFrame {
 		panel.add(btnBan);
 		/*************************************************************************************************************************************************************************/
 		JButton btnOrder = new JButton("ORDER");
+		btnOrder.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnOrder.setForeground(Color.BLACK);
 		btnOrder.setBounds(10, 37, 231, 32);
 		btnOrder.setBackground(Color.GREEN);
@@ -134,25 +138,30 @@ public class formTrangChu extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 				// Load panel1 vao vi tri cua contentPanel	
+				
 				panel.getParent().remove(panelChinh);
 				panel.getParent().revalidate();		
 				try {					
-					panel.getParent().add(new Order());	
+					panelChinh = new Order();
+					panel.getParent().add(panelChinh);	
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
 					e1.printStackTrace();
 				}
-				panel.getParent().repaint();
+				panel.getParent().repaint();				
 		}	
 	});
 		
 		JButton btnMenu = new JButton("MENU");
+		btnMenu.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				panel.getParent().remove(panelChinh);
 				panel.getParent().revalidate();		
 				try {					
-					panel.getParent().add(new menu());	
+					panelChinh = new menu();
+					panel.getParent().add(panelChinh);	
 					
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
@@ -163,16 +172,18 @@ public class formTrangChu extends JFrame {
 		});
 		btnMenu.setForeground(Color.BLACK);
 		btnMenu.setBounds(10, 369, 231, 32);
-		btnMenu.setBackground(new Color(127, 255, 0));
+		btnMenu.setBackground(Color.GREEN);
 		panel.add(btnMenu);
 		
 		JButton btnthanhtoan = new JButton("THANH TOÁN");
+		btnthanhtoan.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnthanhtoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panel.getParent().remove(panelChinh);
 				panel.getParent().revalidate();		
 				try {					
-					panel.getParent().add(new thanhtoan());	
+					panelChinh = new thanhtoan();
+					panel.getParent().add(panelChinh);	
 					
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
@@ -187,12 +198,14 @@ public class formTrangChu extends JFrame {
 		panel.add(btnthanhtoan);
 		
 		JButton btnNewButton_4 = new JButton("NGUYÊN LIỆU");
+		btnNewButton_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panel.getParent().remove(panelChinh);
 				panel.getParent().revalidate();		
-				try {					
-					panel.getParent().add(new nguyenlieu());	
+				try {			
+					panelChinh = new nguyenlieu();
+					panel.getParent().add(panelChinh);	
 					
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
@@ -207,12 +220,14 @@ public class formTrangChu extends JFrame {
 		panel.add(btnNewButton_4);
 		
 		JButton btnitem = new JButton("ĐƠN");
+		btnitem.setForeground(Color.BLACK);
 		btnitem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panel.getParent().remove(panelChinh);
 				panel.getParent().revalidate();		
 				try {					
-					panel.getParent().add(new Don());	
+					panelChinh = new Don();
+					panel.getParent().add(panelChinh);	
 					
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
@@ -221,8 +236,8 @@ public class formTrangChu extends JFrame {
 				panel.getParent().repaint();
 			}
 		});
-		btnitem.setFont(new Font("Times New Roman", Font.BOLD, 10));
-		btnitem.setBackground(Color.GREEN);
+		btnitem.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnitem.setBackground(new Color(127, 255, 0));
 		btnitem.setBounds(10, 437, 231, 32);
 		panel.add(btnitem);
 		
@@ -241,9 +256,4 @@ public class formTrangChu extends JFrame {
 		panel_1.add(lblNewLabel);
 		
 	}
-    private void removeAllJLabel(JPanel panel) {
-        panel.removeAll();
-        panel.validate();
-        panel.repaint();       
-    }
 }

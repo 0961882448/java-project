@@ -88,7 +88,8 @@ public class FormAdmin extends JFrame {
 				panel.getParent().remove(panelChinh);
 				panel.getParent().revalidate();		
 				try {					
-					panel.getParent().add(new admin());	
+					panelChinh = new admin();
+					panel.getParent().add(panelChinh);	
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
 					e1.printStackTrace();
@@ -130,8 +131,9 @@ public class FormAdmin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				panel.getParent().remove(panelChinh);
 				panel.getParent().revalidate();		
-				try {					
-					panel.getParent().add(new NhanVien());	
+				try {	
+					panelChinh = new NhanVien();
+					panel.getParent().add(panelChinh);	
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
 					e1.printStackTrace();
