@@ -1,0 +1,16 @@
+eclipse.preferences.version=1
+encoding//src/dao/NhanVienDAO.java=UTF-8
+encoding//src/dao/UserDAO.java=UTF-8
+encoding//src/dao/banDAO.java=UTF-8
+encoding//src/dao/nguyenlieuDAO.java=UTF-8
+encoding//src/dto/ordersDTO.java=UTF-8
+encoding//src/gui/DKAdmin.java=UTF-8
+encoding//src/gui/DKNhanVien.java=UTF-8
+encoding//src/gui/Don.java=UTF-8
+encoding//src/gui/FormAdmin.java=UTF-8
+encoding//src/gui/NhanVien.java=UTF-8
+encoding//src/gui/Order.java=UTF-8
+encoding//src/gui/ban.java=UTF-8
+encoding//src/gui/formTrangChu.java=UTF-8
+encoding//src/gui/form_dangnhap.java=UTF-8
+encoding//src/gui/thanhtoan.java=UTF-8
