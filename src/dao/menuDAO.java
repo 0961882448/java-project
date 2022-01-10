@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
@@ -86,8 +85,19 @@ public class menuDAO {
 		ResultSet result = stat.executeQuery();
 		if (result.next()){ 
 			return result.getString(1);
-		}
-		
+		}		
+		return tenmon;
+	}
+	
+	public int getMenuTenmon(String u) throws SQLException {
+		int tenmon = 0;
+		String query = "SELECT id FROM nhahang.menu where  ten_mon = ? ;";		
+		PreparedStatement stat = conn.prepareStatement(query);
+		stat.setString(1, u);
+		ResultSet result = stat.executeQuery();
+		if (result.next()){ 
+			return result.getInt(1);
+		}		
 		return tenmon;
 	}
 	

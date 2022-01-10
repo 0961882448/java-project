@@ -3,26 +3,20 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
-
 import javax.swing.JPanel;
-
 import utilities.DBConnection;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.mysql.cj.xdevapi.Table;
+
 import dao.menuDAO;
 import dto.menuDTO;
-import dto.nguyenlieuDTO;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -34,10 +28,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class menu extends JPanel {
 	private JTable table;
-	private JTextField tften;
-	private JTextField tfgia;
 
 	/**
 	 * Create the panel.
@@ -45,7 +38,6 @@ public class menu extends JPanel {
 	 * @throws ClassNotFoundException 
 	 * @throws SQLException 
 	 */
-	@SuppressWarnings("serial")
 	public menu() throws ClassNotFoundException, IOException, SQLException {
 		
 		this.setBackground(Color.gray);
@@ -58,7 +50,7 @@ public class menu extends JPanel {
 		menuDAO menu_dao = new menuDAO(conn);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 10, 525, 379);
+		scrollPane.setBounds(10, 10, 525, 459);
 		add(scrollPane);
 		
 		table = new JTable();
@@ -70,9 +62,11 @@ public class menu extends JPanel {
 				"ID", "T\u00EAn m\u00F3n \u0103n", "Gi\u00E1 ($)"
 			}
 		) {
+			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
 				Integer.class, String.class, Double.class
 			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
@@ -86,7 +80,11 @@ public class menu extends JPanel {
 		menu_dao.getmenutable(table, model);
 		scrollPane.setViewportView(table);
 		
-		JButton btnthem = new JButton(new ImageIcon(new ImageIcon("images/them.png").getImage().getScaledInstance(150, 150,20)));
+		JButton btnthem = new JButton(new ImageIcon(new ImageIcon("images/them.png").getImage().getScaledInstance(20, 20,0)));
+		btnthem.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		btnthem.setHorizontalAlignment(SwingConstants.LEFT);
+		btnthem.setBackground(new Color(152, 251, 152));
+		btnthem.setText("Th\u00EAm M\u00F3n");
 		btnthem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -101,17 +99,22 @@ public class menu extends JPanel {
 				}	
 			}
 		});
-		btnthem.setBounds(545, 10, 150, 150);
+		btnthem.setBounds(545, 10, 150, 40);
 		add(btnthem);
 		
-		JButton btnsua = new JButton(new ImageIcon(new ImageIcon("images/sua.jpg").getImage().getScaledInstance(150, 150,20)));
+		JButton btnsua = new JButton(new ImageIcon(new ImageIcon("images/sua.jpg").getImage().getScaledInstance(20, 20,0)));
+		btnsua.setText("S\u1EEDa M\u00F3n");
+		btnsua.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		btnsua.setHorizontalAlignment(SwingConstants.LEFT);
+		btnsua.setBackground(new Color(152, 251, 152));
 		btnsua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int r = table.getSelectedRow();
-				String ten = tften.getText();
-				double gia = Double.parseDouble(tfgia.getText());		
-				menuDTO neww = new menuDTO(r,ten, gia);
-				try {
+				int id = (int)(table.getValueAt(r,0));
+				String ten = (String)(table.getValueAt(r,1));
+				double gia = (Double)(table.getValueAt(r,2));		
+				menuDTO neww = new menuDTO(id,ten, gia);
+				try {					
 					menu_dao.suaMenu(neww);					
 					DefaultTableModel m = (DefaultTableModel)table.getModel();
 					m.getDataVector().removeAllElements();
@@ -123,57 +126,21 @@ public class menu extends JPanel {
 				}
 			}
 		});
-		btnsua.setBounds(545, 171, 150, 138);
+		btnsua.setBounds(545, 60, 150, 40);
 		add(btnsua);
 		
-
-		
-		JLabel lblNewLabel = new JLabel("ID");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(10, 399, 172, 23);
-		add(lblNewLabel);
-		
-		JLabel lblTnMnn = new JLabel("T\u00EAn m\u00F3n \u0103n");
-		lblTnMnn.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblTnMnn.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTnMnn.setBounds(189, 399, 172, 23);
-		add(lblTnMnn);
-		
-		JLabel lblGi = new JLabel("Gi\u00E1 ($)");
-		lblGi.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblGi.setHorizontalAlignment(SwingConstants.CENTER);
-		lblGi.setBounds(363, 399, 172, 23);
-		add(lblGi);
-		
-		JLabel tfid = new JLabel("");
-		tfid.setForeground(Color.RED);
-		tfid.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		tfid.setHorizontalAlignment(SwingConstants.CENTER);
-		tfid.setBounds(10, 432, 172, 37);
-		add(tfid);
-		
-		tften = new JTextField();
-		tften.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		tften.setHorizontalAlignment(SwingConstants.CENTER);
-		tften.setBounds(189, 432, 172, 37);
-		add(tften);
-		tften.setColumns(10);
-		
-		tfgia = new JTextField();
-		tfgia.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		tfgia.setHorizontalAlignment(SwingConstants.CENTER);
-		tfgia.setColumns(10);
-		tfgia.setBounds(363, 432, 172, 37);
-		add(tfgia);
-		
-		JButton btnxoa = new JButton(new ImageIcon(new ImageIcon("images/xoa.jpg").getImage().getScaledInstance(150, 150,20)));
+		JButton btnxoa = new JButton(new ImageIcon(new ImageIcon("images/xoa.jpg").getImage().getScaledInstance(20, 20,0)));
+		btnxoa.setText("Xo\u00E1 M\u00F3n");
+		btnxoa.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		btnxoa.setHorizontalAlignment(SwingConstants.LEFT);
+		btnxoa.setBackground(new Color(152, 251, 152));
 		btnxoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int r = Integer.parseInt(tfid.getText());
+				int r = table.getSelectedRow();
+				int id = (int)(table.getValueAt(r,0));
 				System.out.println(r);
 				try {
-					menu_dao.xoaMenu(r);
+					menu_dao.xoaMenu(id);
 					DefaultTableModel m = (DefaultTableModel)table.getModel();
 					m.getDataVector().removeAllElements();
 					m.fireTableDataChanged();
@@ -184,39 +151,39 @@ public class menu extends JPanel {
 				}
 			}
 		});
-		btnxoa.setBounds(545, 319, 150, 150);
+		btnxoa.setBounds(545, 110, 150, 40);
 		add(btnxoa);
 		
-		 table.addMouseListener(new MouseListener(){
-		  		@Override
-		  		public void mouseClicked(MouseEvent e) {
-		  			// TODO Auto-generated method stub
-		  			int r = table.getSelectedRow();
-		  			int r_model = -1;
-		  			if (r != -1){
-		  				r_model = table.convertRowIndexToModel(r);
-		  			}
-		  			tfid.setText(String.valueOf(table.getValueAt(r_model,0)));
-		  			tften.setText(String.valueOf(table.getValueAt(r_model,1)));
-		  			tfgia.setText(String.valueOf(table.getValueAt(r_model,2)));
-		  		}
-		  		@Override
-		  		public void mouseEntered(MouseEvent e) {
-		  			// TODO Auto-generated method stub	  			
-		  		}
-		  		@Override
-		  		public void mouseExited(MouseEvent e) {
-		  			// TODO Auto-generated method stub	  			
-		  		}
-		  		@Override
-		  		public void mousePressed(MouseEvent e) {
-		  			// TODO Auto-generated method stub	  			
-		  		}
-		  		@Override
-		  		public void mouseReleased(MouseEvent e) {
-		  			// TODO Auto-generated method stub	  			
-		  		}	      	  
-		        });
+//		 table.addMouseListener(new MouseListener(){
+//		  		@Override
+//		  		public void mouseClicked(MouseEvent e) {
+//		  			// TODO Auto-generated method stub
+//		  			int r = table.getSelectedRow();
+//		  			int r_model = -1;
+//		  			if (r != -1){
+//		  				r_model = table.convertRowIndexToModel(r);
+//		  			}
+//		  			tfid.setText(String.valueOf(table.getValueAt(r_model,0)));
+//		  			tften.setText(String.valueOf(table.getValueAt(r_model,1)));
+//		  			tfgia.setText(String.valueOf(table.getValueAt(r_model,2)));
+//		  		}
+//		  		@Override
+//		  		public void mouseEntered(MouseEvent e) {
+//		  			// TODO Auto-generated method stub	  			
+//		  		}
+//		  		@Override
+//		  		public void mouseExited(MouseEvent e) {
+//		  			// TODO Auto-generated method stub	  			
+//		  		}
+//		  		@Override
+//		  		public void mousePressed(MouseEvent e) {
+//		  			// TODO Auto-generated method stub	  			
+//		  		}
+//		  		@Override
+//		  		public void mouseReleased(MouseEvent e) {
+//		  			// TODO Auto-generated method stub	  			
+//		  		}	      	  
+//		        });
 		
 
 	}

@@ -2,18 +2,14 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-
 import dao.nguyenlieuDAO;
 import dto.nguyenlieuDTO;
 import utilities.DBConnection;
-
 import java.awt.Font;
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
 import java.awt.event.ActionListener;
@@ -25,6 +21,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class themNguyenLieu extends JPanel {
 	private JTextField tften;
 	private JTextField tfgia;
@@ -108,8 +105,5 @@ public class themNguyenLieu extends JPanel {
 		btnthem.setForeground(Color.RED);
 		btnthem.setBounds(221, 312, 124, 45);
 		add(btnthem);
-		
-
-		
 	}
 }

@@ -13,7 +13,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import dao.UserDAO;
 import dto.AdminDTO;
-import hash_password.PBKDF2_Verify_Password;
 import utilities.DBConnection;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -71,6 +70,7 @@ public class admin extends JPanel {
 			Class[] columnTypes = new Class[] {
 				Integer.class, String.class, String.class
 			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
@@ -123,11 +123,10 @@ public class admin extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					int ma = Integer.parseInt(tf_id.getText());				
+					@SuppressWarnings("deprecation")
 					String pas = tf_pass.getText();
-					String user = tf_user.getText();
-					String hash_password;
-					hash_password = PBKDF2_Verify_Password.generateStrongPasswordHash(pas);
-					AdminDTO update = new AdminDTO(ma, user, hash_password );
+					String user = tf_user.getText();					
+					AdminDTO update = new AdminDTO(ma, user, pas );
 					admin.suaAdmin(update);		
 					DefaultTableModel m = (DefaultTableModel)table.getModel();
 					m.getDataVector().removeAllElements();

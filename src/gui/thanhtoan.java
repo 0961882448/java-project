@@ -11,31 +11,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import dao.banDAO;
 import dao.menuDAO;
-import dao.ordersDAO;
+import dao.order_itemDAO;
 import dto.banDTO;
 import utilities.DBConnection;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import java.awt.Font;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.Icon;
 
+@SuppressWarnings("serial")
 public class thanhtoan extends JPanel {
 	private JTable table;
 	private JTable table_1;
+	
+
+	
 
 	/**
 	 * Create the panel.
@@ -43,8 +43,8 @@ public class thanhtoan extends JPanel {
 	 * @throws ClassNotFoundException 
 	 * @throws SQLException 
 	 */
-	@SuppressWarnings("serial")
 	public thanhtoan() throws ClassNotFoundException, IOException, SQLException {
+		
 		this.setBackground(Color.gray);
 		this.setPreferredSize(new Dimension(705, 479));
 		setBounds(271, 115, 705, 479);
@@ -55,7 +55,8 @@ public class thanhtoan extends JPanel {
 		Connection conn = DBConnection.getConnection();
 		banDAO ban_dao = new banDAO(conn);
 		menuDAO menu_dao = new menuDAO(conn); 
-		ordersDAO order_dao = new ordersDAO(conn);
+		//ordersDAO order_dao = new ordersDAO(conn);
+		order_itemDAO item_dao = new order_itemDAO(conn);
 		
 		
 		
@@ -72,9 +73,11 @@ public class thanhtoan extends JPanel {
 				"ID B\u00E0n", "Tr\u1EA1ng th\u00E1i"
 			}
 		) {
+			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
 				Integer.class, String.class
 			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
@@ -97,17 +100,19 @@ public class thanhtoan extends JPanel {
 			new Object[][] {
 			},
 			new String[] {
-				"ID Order", "M\u00F3n \u0103n", "S\u1ED1 l\u01B0\u1EE3ng", "Gi\u1EA3m gi\u00E1", "Gi\u00E1 ($)"
+				"ID", "ID Order", "M\u00F3n \u0103n", "S\u1ED1 l\u01B0\u1EE3ng", "Gi\u1EA3m gi\u00E1", "Gi\u00E1 ($)"
 			}
 		) {
+			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
-				Integer.class, String.class, Integer.class, Double.class, Double.class
+				Integer.class, Integer.class, String.class, Integer.class, Double.class, Double.class
 			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false
+				false, true, true, true, true, true
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -125,7 +130,25 @@ public class thanhtoan extends JPanel {
 		lblTngGiTin.setBounds(473, 312, 125, 32);
 		add(lblTngGiTin);
 		
-
+		JButton btnXoa = new JButton(new ImageIcon(new ImageIcon("images/xoa.jpg").getImage().getScaledInstance(40, 40,20)));
+		btnXoa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				DefaultTableModel model = (DefaultTableModel) table_1.getModel();
+				int r = table_1.getSelectedRow();
+				int id = (int) table_1.getValueAt(r, 0);
+				try {
+					item_dao.xoaItem(id);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				model.removeRow(r);
+			}
+		});
+		btnXoa.setBounds(248, 304, 40, 40);
+		add(btnXoa);
 		
 	      table.addMouseListener(new MouseListener(){
 	  		@Override
@@ -145,19 +168,19 @@ public class thanhtoan extends JPanel {
 		  				ResultSet result = stat.executeQuery();	
 		  				if(result.next()){		  					
 		  					do {
-		  					int id = result.getInt(2);
+		  					int id = result.getInt(1);
+		  					int idor = result.getInt(2);
 		  					int idmenu = result.getInt(3);
 		  					String tenmon = menu_dao.getMenuid(idmenu);		  					
-		  					Double gia1donVi = menu_dao.getPriceMenu(tenmon);			  					
-		  					//System.out.println(id);
+		  					Double gia1donVi = menu_dao.getPriceMenu(tenmon);	  					
 		  					int soluong = result.getInt(4);
 		  					Double giamgia = result.getDouble(5);	
 		  					Double gia = gia1donVi*soluong*(1-giamgia);
-		  					df.addRow(new Object [] {id, tenmon, soluong, giamgia, gia} );			
+		  					df.addRow(new Object [] {id,idor, tenmon, soluong, giamgia, gia} );			
 		  					} while (result.next());
 		  					}
 		  				int column = table_1.getColumnCount();
-		  				
+		  				//System.out.println(column);
 						double sum = 0;
 						for(int i=0 ; i<table_1.getRowCount(); i++) {
 							Double tam = (double) table_1.getValueAt(i, column -1);					
@@ -190,13 +213,17 @@ public class thanhtoan extends JPanel {
 	  		}	      	  
 	        });
 	      
+
+	      
 			JButton btnthanhtoan = new JButton(new ImageIcon(new ImageIcon("images/thantoan.png").getImage().getScaledInstance(85, 86,20)));
 			btnthanhtoan.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null,"Thanh toán thành công thành công");
-					int r = table.getSelectedRow();		
-		  			String ban = String.valueOf(table.getValueAt(r,0));
-		  			int idban = Integer.parseInt(ban);
+//					int r = table.getSelectedRow();		
+//		  			String ban = String.valueOf(table.getValueAt(r,0));
+//		  			int idban = Integer.parseInt(ban);
+//		  			System.out.println(idban);
+					int idban = getIDBan();
 		  			String statu = "trống";
 		  			banDTO upde = new banDTO(idban, statu);
 		  			try {
@@ -205,6 +232,15 @@ public class thanhtoan extends JPanel {
 						m.getDataVector().removeAllElements();
 						m.fireTableDataChanged();
 						ban_dao.getbanDSDtable(table, model);
+						
+//						int n = table.getSelectedRow();	
+//						String idString = String.valueOf(table.getValueAt(n, 0));
+//						int idBan = Integer.parseInt(idString);
+//						System.out.println(idBan);
+						
+						DefaultTableModel m1 = (DefaultTableModel)table_1.getModel();
+						m1.getDataVector().removeAllElements();
+						m1.fireTableDataChanged();
 					} catch (NoSuchAlgorithmException | InvalidKeySpecException | SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -219,7 +255,38 @@ public class thanhtoan extends JPanel {
 			JButton btnin = new JButton(new ImageIcon(new ImageIcon("images/in.jpg").getImage().getScaledInstance(85, 86,20)));
 			btnin.setForeground(Color.GREEN);
 			btnin.setBounds(513, 363, 85, 86);
-			add(btnin);
-		
+			add(btnin);			
+			
+			JButton btnThem = new JButton((Icon) null);
+			btnThem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int r = table.getSelectedRow();		
+					String ban = String.valueOf(table.getValueAt(r,0));
+					int idban = Integer.parseInt(ban);
+					int m = table_1.getSelectedRow();							
+					int idOr = (int) table_1.getValueAt(m,1);
+					try {
+						JOptionPane.showMessageDialog(null,new Order(idban, idOr));						
+					} catch (ClassNotFoundException | SQLException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+			btnThem.setBounds(305, 304, 40, 40);
+			add(btnThem);
+	
+	}
+	public int getIDBan() {
+		int r = table.getSelectedRow();		
+		String ban = String.valueOf(table.getValueAt(r,0));
+		int idban = Integer.parseInt(ban);
+		System.out.println(idban);				
+		return idban;
+	}
+	public int getIDor() {
+		int m = table_1.getSelectedRow();							
+		int idOr = (int) table_1.getValueAt(m,1);		
+		return idOr;
 	}
 }

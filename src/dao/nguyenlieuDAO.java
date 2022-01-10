@@ -6,12 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import dto.nguyenlieuDTO;
 
 
@@ -20,7 +17,25 @@ public class nguyenlieuDAO {
 	public nguyenlieuDAO(Connection conn){
 		this.conn = conn;
 	}
-
+	
+	public Double giaNguyenLieu() throws SQLException {	
+		
+		 
+		
+		Double sum = 0.0 ;
+		String query = "select gia, so_luong from nguyen_lieu;";
+		PreparedStatement stat = conn.prepareStatement(query);		
+		ResultSet result = stat.executeQuery();
+		if(result.next()) {
+			do {
+				Double gia = result.getDouble(1);
+				int sl = result.getInt(2);
+				sum = sum + gia*sl;				
+			} while (result.next());
+		}
+		return sum;
+		
+	}
 
 	public boolean themNguyenLieu(nguyenlieuDTO u) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		String tenNL = u.getTenNguyenLieu();

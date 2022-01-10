@@ -1,18 +1,11 @@
 package gui;
 
-
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridBagConstraints;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import javax.swing.JSeparator;
 import java.awt.Color;
-import java.awt.Component;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -57,10 +50,10 @@ public class FormAdmin extends JFrame {
 		getContentPane().setLayout(null);
 		this.setVisible(true);
 
-		String ngay = java.time.LocalDate.now().toString();		
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-		Calendar cal = Calendar.getInstance();
-		String gio = dateFormat.format(cal.getTime());
+		//String ngay = java.time.LocalDate.now().toString();		
+		//DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+		//Calendar cal = Calendar.getInstance();
+		//String gio = dateFormat.format(cal.getTime());
 		
 		
 
@@ -102,29 +95,25 @@ public class FormAdmin extends JFrame {
 		btAddAdmin.setBackground(Color.GREEN);
 		panel.add(btAddAdmin);
 		
-		JButton btnDoangthu = new JButton("Doanh Thu");
-		btnDoangthu.setFont(new Font("Times New Roman", Font.BOLD, 20));
-//		btnOrder.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {			
-//					// Load panel1 vao vi tri cua contentPanel				
-//					btnOrder.getParent().remove(panelChinh);
-//					btnOrder.getParent().revalidate();
-//					
-//					//c.fill = GridBagConstraints.BOTH;			
-//					try {
-//					//	btnOrder.getParent().add(new Order().setBound(271, 115, 705, 479));
-//						//Order.setBounds(271, 115, 705, 479);
-//					} catch (ClassNotFoundException | SQLException | IOException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
-//					btnOrder.getParent().repaint();
-//				}	
-//			
-//		});
-		btnDoangthu.setBounds(10, 37, 231, 32);
-		btnDoangthu.setBackground(Color.GREEN);
-		panel.add(btnDoangthu);
+		JButton btnDoanhthu = new JButton("Doanh Thu");	
+		btnDoanhthu.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		btnDoanhthu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {			
+				panel.getParent().remove(panelChinh);
+				panel.getParent().revalidate();		
+				try {	
+					panelChinh = new doangthu();
+					panel.getParent().add(panelChinh);	
+				} catch (ClassNotFoundException | SQLException | IOException e1) {
+					// TODO Auto-generated catch block					
+					e1.printStackTrace();
+				}
+				panel.getParent().repaint();
+				}			
+		});
+		btnDoanhthu.setBounds(10, 37, 231, 32);
+		btnDoanhthu.setBackground(Color.GREEN);
+		panel.add(btnDoanhthu);
 		
 		JButton btAddNV = new JButton("Nhân Viên");
 		btAddNV.addActionListener(new ActionListener() {

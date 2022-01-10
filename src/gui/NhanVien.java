@@ -2,12 +2,9 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-
 import javax.swing.JPanel;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,25 +15,21 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
-import java.awt.HeadlessException;
-
-import dao.NhanVienDAO;
-import dto.NhanVienDTO;
-import hash_password.PBKDF2_Verify_Password;
-import utilities.DBConnection;
-
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
+
+import dao.NhanVienDAO;
+import dto.NhanVienDTO;
+import utilities.DBConnection;
+
+
 
 
 @SuppressWarnings("serial")
@@ -90,9 +83,11 @@ public class NhanVien extends JPanel {
 				"M\u00E3 NV", "H\u1ECD T\u00EAn", "Ng\u00E0y Sinh", "Username", "Password", "Quy\u1EC1n", "L\u01B0\u01A1ng"
 			}
 		) {
+			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
 				Integer.class, String.class, String.class, String.class, String.class, String.class, Integer.class
 			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
@@ -150,18 +145,17 @@ public class NhanVien extends JPanel {
 		
 		JButton btnupdate = new JButton("Update");
 		btnupdate.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				try {
 					int ma = Integer.parseInt(tf_manv.getText());
 					String name = tf_hoten.getText();
 					LocalDate date = LocalDate.parse(tf_ngaysinh.getText());
 					String user = tf_user.getText();
-					String pas = tf_pass.getText();
-					String hash_password;
+					String pas = tf_pass.getText();					
 					String qu = tf_quyen.getText();
-					int lu = Integer.parseInt(tf_luong.getText());
-					hash_password = PBKDF2_Verify_Password.generateStrongPasswordHash(pas);
-					NhanVienDTO update = new NhanVienDTO(ma,name, date, user, hash_password, qu, lu);
+					int lu = Integer.parseInt(tf_luong.getText());					
+					NhanVienDTO update = new NhanVienDTO(ma,name, date, user, pas, qu, lu);
 					nhanvien.suaNhanvien(update);		
 					DefaultTableModel m = (DefaultTableModel)table.getModel();
 					m.getDataVector().removeAllElements();

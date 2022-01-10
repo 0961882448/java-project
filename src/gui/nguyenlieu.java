@@ -32,12 +32,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class nguyenlieu extends JPanel {
 	private JTable table;
-	private JTextField tfngay;
-	private JTextField tfsl;
-	private JTextField tfgia;
-	private JTextField tften;
 
 	/**
 	 * Create the panel.
@@ -45,7 +42,6 @@ public class nguyenlieu extends JPanel {
 	 * @throws ClassNotFoundException 
 	 * @throws SQLException 
 	 */
-	@SuppressWarnings("serial")
 	public nguyenlieu() throws ClassNotFoundException, IOException, SQLException {
 		this.setBackground(Color.gray);
 		this.setPreferredSize(new Dimension(705, 479));
@@ -57,7 +53,7 @@ public class nguyenlieu extends JPanel {
 		nguyenlieuDAO nguyenlieu_dao = new nguyenlieuDAO(conn);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 10, 525, 311);
+		scrollPane.setBounds(10, 10, 525, 414);
 		add(scrollPane);
 		
 		table = new JTable();
@@ -69,9 +65,11 @@ public class nguyenlieu extends JPanel {
 				"ID", "T\u00EAn nguy\u00EAn li\u1EC7u", "Gi\u00E1 (1 \u0111\u01A1n v\u1ECB)", "S\u1ED1 l\u01B0\u1EE3ng", "Ng\u00E0y nh\u1EADp"
 			}
 		) {
+			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
 				Integer.class, String.class, Double.class, Integer.class, String.class
 			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
@@ -93,14 +91,21 @@ public class nguyenlieu extends JPanel {
 		lblNewLabel.setBounds(37, 424, 234, 45);
 		add(lblNewLabel);
 		
-		JLabel tong = new JLabel("");
+		
+		Double sum = nguyenlieu_dao.giaNguyenLieu();
+		String sumString = String.valueOf(sum);
+		JLabel tong = new JLabel(sumString);
 		tong.setForeground(Color.RED);
 		tong.setHorizontalAlignment(SwingConstants.CENTER);
 		tong.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		tong.setBounds(301, 424, 234, 45);
 		add(tong);
 		
-		JButton btnthem = new JButton(new ImageIcon(new ImageIcon("images/them.png").getImage().getScaledInstance(150, 150,20)));
+		JButton btnthem = new JButton(new ImageIcon(new ImageIcon("images/them.png").getImage().getScaledInstance(20,20,20)));
+		btnthem.setBackground(new Color(127, 255, 0));
+		btnthem.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		btnthem.setHorizontalAlignment(SwingConstants.LEFT);
+		btnthem.setText("Th\u00EAm NL");
 		btnthem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -115,18 +120,26 @@ public class nguyenlieu extends JPanel {
 				}	
 			}
 		});
-		btnthem.setBounds(545, 10, 150, 150);
+		btnthem.setBounds(545, 10, 150, 40);
 		add(btnthem);
 		
-		JButton btnsua = new JButton(new ImageIcon(new ImageIcon("images/sua.jpg").getImage().getScaledInstance(150, 150,20)));
+		JButton btnsua = new JButton(new ImageIcon(new ImageIcon("images/sua.jpg").getImage().getScaledInstance(20,20,20)));
+		btnsua.setBackground(new Color(127, 255, 0));
+		btnsua.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		btnsua.setHorizontalAlignment(SwingConstants.LEFT);
+		btnsua.setText("S\u1EEDa NL");
 		btnsua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int r = table.getSelectedRow();
-				String ten = tften.getText();
-				double gia = Double.parseDouble(tfgia.getText());
-				int sl = Integer.parseInt(tfsl.getText());
-				LocalDate ngay = LocalDate.parse(tfngay.getText()) ;		
-				nguyenlieuDTO neww = new nguyenlieuDTO(r,ten, gia, sl, ngay);
+				
+				int id = (int) table.getValueAt(r, 0);
+				String ten = (String) table.getValueAt(r, 1);
+				double gia = (Double) table.getValueAt(r, 2);
+				int sl = (int) table.getValueAt(r, 3);
+				String ngayString = (String) table.getValueAt(r, 4);
+				LocalDate ngay = LocalDate.parse(ngayString);
+				
+				nguyenlieuDTO neww = new nguyenlieuDTO(id,ten, gia, sl, ngay);
 				try {
 					nguyenlieu_dao.suaNguyenLieu(neww);
 					DefaultTableModel m = (DefaultTableModel)table.getModel();
@@ -139,16 +152,20 @@ public class nguyenlieu extends JPanel {
 				}
 			}
 		});
-		btnsua.setBounds(545, 171, 150, 138);
+		btnsua.setBounds(545, 60, 150, 40);
 		add(btnsua);
 		
-		JButton btnxoa = new JButton(new ImageIcon(new ImageIcon("images/xoa.jpg").getImage().getScaledInstance(150, 150,20)));
+		JButton btnxoa = new JButton(new ImageIcon(new ImageIcon("images/xoa.jpg").getImage().getScaledInstance(20,20,20)));
+		btnxoa.setBackground(new Color(127, 255, 0));
+		btnxoa.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		btnxoa.setHorizontalAlignment(SwingConstants.LEFT);
+		btnxoa.setText("Xo\u00E1 NL");
 		btnxoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int r = table.getSelectedRow();
-				System.out.println(r);
+				int id = (int) table.getValueAt(r, 0);
 				try {
-					nguyenlieu_dao.xoaNguyenLieu(r);
+					nguyenlieu_dao.xoaNguyenLieu(id);
 					DefaultTableModel m = (DefaultTableModel)table.getModel();
 					m.getDataVector().removeAllElements();
 					m.fireTableDataChanged();
@@ -159,100 +176,40 @@ public class nguyenlieu extends JPanel {
 				}
 			}
 		});
-		btnxoa.setBounds(545, 319, 150, 150);
+		btnxoa.setBounds(545, 110, 150, 40);
 		add(btnxoa);
 		
-		tfngay = new JTextField();
-		tfngay.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		tfngay.setColumns(10);
-		tfngay.setBounds(439, 357, 96, 33);
-		add(tfngay);
-		
-		tfsl = new JTextField();
-		tfsl.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		tfsl.setColumns(10);
-		tfsl.setBounds(333, 357, 96, 33);
-		add(tfsl);
-		
-		tfgia = new JTextField();
-		tfgia.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		tfgia.setColumns(10);
-		tfgia.setBounds(227, 357, 96, 33);
-		add(tfgia);
-		
-		tften = new JTextField();
-		tften.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		tften.setColumns(10);
-		tften.setBounds(116, 357, 96, 33);
-		add(tften);
-		
-		JLabel lblNewLabel_1 = new JLabel("ID");
-		lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(10, 331, 96, 19);
-		add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_1_1 = new JLabel("T\u00EAn ");
-		lblNewLabel_1_1.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_1.setBounds(116, 331, 96, 19);
-		add(lblNewLabel_1_1);
-		
-		JLabel lblNewLabel_1_2 = new JLabel("Gi\u00E1");
-		lblNewLabel_1_2.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		lblNewLabel_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_2.setBounds(227, 331, 96, 19);
-		add(lblNewLabel_1_2);
-		
-		JLabel lblNewLabel_1_3 = new JLabel("S\u1ED1 l\u01B0\u1EE3ng");
-		lblNewLabel_1_3.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		lblNewLabel_1_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_3.setBounds(333, 331, 96, 19);
-		add(lblNewLabel_1_3);
-		
-		JLabel lblNewLabel_1_4 = new JLabel("Ng\u00E0y nh\u1EADp");
-		lblNewLabel_1_4.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		lblNewLabel_1_4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_4.setBounds(439, 331, 96, 19);
-		add(lblNewLabel_1_4);
-		
-		JLabel tfid = new JLabel("");
-		tfid.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		tfid.setHorizontalAlignment(SwingConstants.CENTER);
-		tfid.setBounds(10, 357, 96, 33);
-		add(tfid);
-		
-	      table.addMouseListener(new MouseListener(){
-	  		@Override
-	  		public void mouseClicked(MouseEvent e) {
-	  			// TODO Auto-generated method stub
-	  			int r = table.getSelectedRow();
-	  			int r_model = -1;
-	  			if (r != -1){
-	  				r_model = table.convertRowIndexToModel(r);
-	  			}
-	  			tfid.setText(String.valueOf(table.getValueAt(r_model,0)));
-	  			tften.setText(String.valueOf(table.getValueAt(r_model,1)));
-	  			tfgia.setText(String.valueOf(table.getValueAt(r_model,2)));
-	  			tfsl.setText(String.valueOf(table.getValueAt(r_model,3)));
-	  			tfngay.setText(String.valueOf(table.getValueAt(r_model,4)));
-	  		}
-	  		@Override
-	  		public void mouseEntered(MouseEvent e) {
-	  			// TODO Auto-generated method stub	  			
-	  		}
-	  		@Override
-	  		public void mouseExited(MouseEvent e) {
-	  			// TODO Auto-generated method stub	  			
-	  		}
-	  		@Override
-	  		public void mousePressed(MouseEvent e) {
-	  			// TODO Auto-generated method stub	  			
-	  		}
-	  		@Override
-	  		public void mouseReleased(MouseEvent e) {
-	  			// TODO Auto-generated method stub	  			
-	  		}	      	  
-	        });
+//	      table.addMouseListener(new MouseListener(){
+//	  		@Override
+//	  		public void mouseClicked(MouseEvent e) {
+//	  			// TODO Auto-generated method stub
+//	  			int r = table.getSelectedRow();
+//	  			int r_model = -1;
+//	  			if (r != -1){
+//	  				r_model = table.convertRowIndexToModel(r);
+//	  			}
+//	  			tfid.setText(String.valueOf(table.getValueAt(r_model,0)));
+//	  			tften.setText(String.valueOf(table.getValueAt(r_model,1)));
+//	  			tfgia.setText(String.valueOf(table.getValueAt(r_model,2)));
+//	  			tfsl.setText(String.valueOf(table.getValueAt(r_model,3)));
+//	  			tfngay.setText(String.valueOf(table.getValueAt(r_model,4)));
+//	  		}
+//	  		@Override
+//	  		public void mouseEntered(MouseEvent e) {
+//	  			// TODO Auto-generated method stub	  			
+//	  		}
+//	  		@Override
+//	  		public void mouseExited(MouseEvent e) {
+//	  			// TODO Auto-generated method stub	  			
+//	  		}
+//	  		@Override
+//	  		public void mousePressed(MouseEvent e) {
+//	  			// TODO Auto-generated method stub	  			
+//	  		}
+//	  		@Override
+//	  		public void mouseReleased(MouseEvent e) {
+//	  			// TODO Auto-generated method stub	  			
+//	  		}	      	  
+//	        });
 	}
 }

@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class themMenu extends JPanel {
 	private JTextField tften;
 	private JTextField tfgia;

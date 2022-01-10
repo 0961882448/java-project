@@ -42,6 +42,7 @@ public class ordersDAO {
 	}
 	
 	
+	
 	public Double getGiaOrder(int u) throws SQLException {
 		Double gia = null;
 		String query = "SELECT price_order FROM nhahang.orders where  id = ?;";		

@@ -174,8 +174,6 @@ public class NhanVienDAO {
 		return false;		
 	}
 	
-
-	
 }
 
 

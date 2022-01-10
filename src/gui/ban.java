@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class ban extends JPanel {
 	private JTable table;
 	private JTable table_1;
@@ -30,7 +31,6 @@ public class ban extends JPanel {
 	 * @throws ClassNotFoundException 
 	 * @throws SQLException 
 	 */
-	@SuppressWarnings("serial")
 	public ban() throws ClassNotFoundException, IOException, SQLException {
 		this.setBackground(Color.gray);
 		this.setPreferredSize(new Dimension(705, 479));
@@ -55,9 +55,11 @@ public class ban extends JPanel {
 				"ID b\u00E0n", "Tr\u1EA1ng th\u00E1i"
 			}
 		) {
+			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
 				Integer.class, String.class
 			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
@@ -84,9 +86,11 @@ public class ban extends JPanel {
 				"ID b\u00E0n", "Tr\u1EA1ng th\u00E1i"
 			}
 		) {
+			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
 				Float.class, String.class
 			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}

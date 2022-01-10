@@ -1,25 +1,12 @@
 package gui;
-
-
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import utilities.DBConnection;
-
-import java.awt.GridBagConstraints;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import javax.swing.JSeparator;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -37,7 +24,6 @@ public class formTrangChu extends JFrame {
 	private final JSeparator separator = new JSeparator();
 	private JPanel panel;
 	private JPanel panelChinh;
-	GridBagConstraints c;
 
 	/**
 	 * Launch the application.
@@ -64,10 +50,10 @@ public class formTrangChu extends JFrame {
 		this.setTitle("Quản lý nhà hàng");
 		this.setVisible(true);
 
-		String ngay = java.time.LocalDate.now().toString();		
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-		Calendar cal = Calendar.getInstance();
-		String gio = dateFormat.format(cal.getTime());	
+		//String ngay = java.time.LocalDate.now().toString();		
+		//DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+		//Calendar cal = Calendar.getInstance();
+		//String gio = dateFormat.format(cal.getTime());	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 650);
 		contentPane = new JPanel();
@@ -93,13 +79,13 @@ public class formTrangChu extends JFrame {
 		
 		
 		JButton btndx = new JButton(new ImageIcon(new ImageIcon("images/dangxuat.jpg").getImage().getScaledInstance(10, 20,20)));
+		btndx.setBounds(943, 0, 43, 32);
 		btndx.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new form_dangnhap();
 				dispose();
 			}
 		});
-		btndx.setBounds(943, 0, 43, 32);
 		contentPane.add(btndx);
 		
 		
@@ -143,7 +129,7 @@ public class formTrangChu extends JFrame {
 				panel.getParent().revalidate();		
 				try {					
 					panelChinh = new Order();
-					panel.getParent().add(panelChinh);	
+					panel.getParent().add(panelChinh);					
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
 					e1.printStackTrace();
@@ -176,7 +162,7 @@ public class formTrangChu extends JFrame {
 		panel.add(btnMenu);
 		
 		JButton btnthanhtoan = new JButton("THANH TOÁN");
-		btnthanhtoan.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnthanhtoan.setFont(new Font("Tahoma", Font.PLAIN, 12));				
 		btnthanhtoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panel.getParent().remove(panelChinh);
@@ -192,6 +178,7 @@ public class formTrangChu extends JFrame {
 				panel.getParent().repaint();
 			}
 		});
+		
 		btnthanhtoan.setForeground(Color.BLACK);
 		btnthanhtoan.setBounds(10, 120, 231, 32);
 		btnthanhtoan.setBackground(new Color(127, 255, 0));
@@ -239,7 +226,7 @@ public class formTrangChu extends JFrame {
 		btnitem.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnitem.setBackground(new Color(127, 255, 0));
 		btnitem.setBounds(10, 437, 231, 32);
-		panel.add(btnitem);
+		panel.add(btnitem);	
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(0, 0, 986, 105);
@@ -256,4 +243,22 @@ public class formTrangChu extends JFrame {
 		panel_1.add(lblNewLabel);
 		
 	}
+//	@Override
+//	public void actionPerformed(ActionEvent e) {
+//		// TODO Auto-generated method stub
+//		//System.out.println("Button thanh toan");
+//		panel.getParent().remove(panelChinh);
+//		panel.getParent().revalidate();	
+//		try {					
+//			panelThanhtoan = new thanhtoan();
+//			panelChinh = new thanhtoan();			
+//			panel.getParent().add(panelChinh);	
+//			//System.out.println(panelThanhtoan.getIDBan());
+//			
+//		} catch (ClassNotFoundException | SQLException | IOException e1) {
+//			// TODO Auto-generated catch block					
+//			e1.printStackTrace();
+//		}
+//		panel.getParent().repaint();
+//	}
 }
