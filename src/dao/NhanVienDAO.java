@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import dto.NhanVienDTO;
@@ -147,23 +149,7 @@ public class NhanVienDAO {
 		stat.setInt(6, luong);
 		stat.setInt(7, id);
 		stat.execute();
-////		if(stat.executeUpdate()>0) {
-////            public void actionPerformed(ActionEvent e) {
-////                int result = JOptionPane.showConfirmDialog(frame,
-////                        "Bạn có chắc muốn lưu sinh viên này",
-////                        "Xác nhận",
-////                        JOptionPane.YES_NO_OPTION,
-////                        JOptionPane.QUESTION_MESSAGE);
-////                if(result == JOptionPane.YES_OPTION){
-////                    label.setText("Bạn chọn: Yes");
-////                }else if (result == JOptionPane.NO_OPTION){
-////                    label.setText("Bạn chọn : No");
-////                }else {
-////                    label.setText("Chưa ");
-////                }
-////            }
-//			
-////		}
+		JOptionPane.showMessageDialog(null,	"Sửa nhân viên thành công.");
 	}
 	
 	public boolean xoaNhanvien(int maNV) throws SQLException {

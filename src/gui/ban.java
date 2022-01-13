@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
@@ -138,6 +140,7 @@ public class ban extends JPanel {
 				String statu = "trống";
 				try {
 					ban_dao.themBan(statu);
+					JOptionPane.showMessageDialog(null,"Thêm bàn thành công");
 					DefaultTableModel m = (DefaultTableModel)table_1.getModel();
 					m.getDataVector().removeAllElements();
 					m.fireTableDataChanged();
@@ -148,16 +151,10 @@ public class ban extends JPanel {
 					ban_dao.getbanDSDtable(table, model);
 					String lbtrong = String.valueOf(table_1.getRowCount());	
 					trong.setText(lbtrong);
-				} catch (NoSuchAlgorithmException e1) {
+				} catch (NoSuchAlgorithmException | InvalidKeySpecException | SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} catch (InvalidKeySpecException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}				
+				} 				
 			}
 		});
 		btnThem.setFont(new Font("Times New Roman", Font.BOLD, 25));
@@ -169,7 +166,7 @@ public class ban extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int r = table.getSelectedRow();			
 				int r2 = table_1.getSelectedRow();
-				if(table.getSelectedRow()==-1) {
+				if(r2 != -1 && r == -1) {
 					try {
 						int id2 = (int) table_1.getValueAt(r2, 0); 
 						ban_dao.xoaBan(id2);
@@ -183,7 +180,7 @@ public class ban extends JPanel {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				} else if (table_1.getSelectedRow() == -1) {
+				} else if (r != -1 && r2 == -1) {
 					try {
 						int id = (int) table.getValueAt(r, 0);
 						ban_dao.xoaBan(id);
@@ -197,7 +194,9 @@ public class ban extends JPanel {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				} 
+				} else if (r == -1 && r2 == -1) {
+					JOptionPane.showMessageDialog(null,"Vui lòng chọn bàn cần Xoá.");
+				}
 			}
 		});
 		btnXoa.setFont(new Font("Times New Roman", Font.BOLD, 25));

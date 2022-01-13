@@ -49,6 +49,7 @@ public class admin extends JPanel {
 		this.setLayout(null);
 		setBounds(271, 115, 705, 479);
 		
+		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 10, 685, 305);
 		add(scrollPane);
@@ -87,7 +88,16 @@ public class admin extends JPanel {
 		JButton btnadd = new JButton("Thêm NV");
 		btnadd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showInputDialog(new DKAdmin());				
+				JOptionPane.showInputDialog(new DKAdmin());		
+				DefaultTableModel m = (DefaultTableModel)table.getModel();
+				m.getDataVector().removeAllElements();
+				m.fireTableDataChanged();
+				try {
+					admin.getAdmintable(table, model);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 		}});
 		btnadd.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		btnadd.setBounds(21, 422, 141, 47);
@@ -132,33 +142,11 @@ public class admin extends JPanel {
 					m.getDataVector().removeAllElements();
 					m.fireTableDataChanged();
 					admin.getAdmintable(table, model);
-				} catch (SQLException e1) {
+				} catch (SQLException | NoSuchAlgorithmException | InvalidKeySpecException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} catch (NoSuchAlgorithmException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-				} catch (InvalidKeySpecException e1) {
-					// TODO Auto-generated catch block
-						e1.printStackTrace();
-				}
+				} 
 		}});
-		JButton tailai = new JButton(new ImageIcon(new ImageIcon("images/tailai.png").getImage().getScaledInstance(30, 40,20)));
-		tailai.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					DefaultTableModel m = (DefaultTableModel)table.getModel();
-					m.getDataVector().removeAllElements();
-					m.fireTableDataChanged();
-					admin.getAdmintable(table, model);					
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}	
-			}
-		});
-		tailai.setBounds(634, 422, 61, 47);
-		add(tailai);
 		btnupdate.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		btnupdate.setBounds(230, 422, 131, 47);
 		add(btnupdate);

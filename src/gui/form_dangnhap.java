@@ -145,7 +145,6 @@ public class form_dangnhap extends JFrame {
 						}else if (users_dao.layIdNhanvien(tenDN) >0) {
 							
 							String stored_passwordnv = users_dao.layPassNhanvien(tenDN);							
-							System.out.println(stored_passwordnv);
 							boolean  is_match2 = PBKDF2_Verify_Password.validatePassword(mk, stored_passwordnv);
 					
 							if (is_match2){

@@ -85,16 +85,10 @@ public class DKAdmin extends JPanel {
 					if(RegisterData()) {
 						JOptionPane.showMessageDialog(null,"Đăng ký Admin thành công.");
 					}
-				} catch (HeadlessException e) {
+				} catch (HeadlessException | NoSuchAlgorithmException | InvalidKeySpecException |ClassNotFoundException | SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvalidKeySpecException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				} 
 			}
 		});
 		btnSave.setFont(new Font("Monotype Corsiva", Font.BOLD, 35));
@@ -105,7 +99,7 @@ public class DKAdmin extends JPanel {
 
 	}
 	
-	private Boolean RegisterData() throws NoSuchAlgorithmException, InvalidKeySpecException
+	private Boolean RegisterData() throws NoSuchAlgorithmException, InvalidKeySpecException, ClassNotFoundException, SQLException
 	{
 		
 		String strUsername = txtUsername.getText();
@@ -146,26 +140,15 @@ public class DKAdmin extends JPanel {
 		AdminDTO new_user = new AdminDTO(strUsername, strPassword);
 		try {
 			DBConnection.init("database.properties");
-			try {
 				Connection conn = DBConnection.getConnection();
-				UserDAO user_dao = new UserDAO(conn);
-				
+				UserDAO user_dao = new UserDAO(conn);				
 				status = user_dao.themAdmin(new_user);
 				resetRegistrationForm();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException |IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-				
+		} 
 		return status;
-
 	}
 	
 	public void resetRegistrationForm(){

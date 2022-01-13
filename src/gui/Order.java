@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -203,14 +204,27 @@ public class Order extends JPanel {
 				String idnv = idnv_1.getSelectedItem().toString();				
 				String name = monan.getSelectedItem().toString();
 				int price = (int) soluong.getValue();
-				Double discount = Double.parseDouble(giamgia.getText());					
+				String discount1 = giamgia.getText();
+				
+				if(discount1.equals(""))
+				{
+					JOptionPane.showMessageDialog(null,
+							"Vui lòng nhập Giảm giá.");
+					giamgia.requestFocusInWindow(); 					
+				} else if (price == 0) {
+					JOptionPane.showMessageDialog(null,
+							"Vui lòng nhập Số lượng.");
+					soluong.requestFocusInWindow(); 			
+				}
+				else {					
 					try {						
 						String query = "SELECT gia FROM menu where ten_mon = ?";
 						PreparedStatement stat = conn.prepareStatement(query);
 						stat.setString(1, name);
 						ResultSet result = stat.executeQuery();
 						if(result.next()) {
-							Double gia = result.getDouble(1);						
+							Double gia = result.getDouble(1);	
+							Double discount = Double.parseDouble(giamgia.getText());
 							Double giaTien = gia*price*(1-discount);
 							model.addRow(new Object [] {idnv, name, price, discount, giaTien} );
 						}	
@@ -218,6 +232,8 @@ public class Order extends JPanel {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+				}
+
 			}
 		});
 		
@@ -228,8 +244,7 @@ public class Order extends JPanel {
 		panel_1.add(additem2);
 		JSpinner soluong_1 = new JSpinner();
 		soluong_1.setBounds(101, 103, 120, 26);
-		panel_1.add(soluong_1);
-		
+		panel_1.add(soluong_1);		
 
 		additem2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
@@ -237,15 +252,26 @@ public class Order extends JPanel {
 				String idnv2 = idnv_1.getSelectedItem().toString();				
 				String name2 = monan_1.getSelectedItem().toString();
 				int price2 = (int) soluong_1.getValue();
-				Double discount2 = Double.parseDouble(giamgia_1.getText());
-							
+				String discount3 = giamgia_1.getText();
+				
+				if(discount3.equals(""))
+				{
+					JOptionPane.showMessageDialog(null,
+							"Vui lòng nhập Giảm giá.");
+					giamgia_1.requestFocusInWindow(); 					
+				} else if (price2 == 0) {
+					JOptionPane.showMessageDialog(null,
+							"Vui lòng nhập Số lượng.");
+					soluong_1.requestFocusInWindow(); 			
+				}else {
 					try {
 						String query = "SELECT gia FROM menu where ten_mon = ?";
 						PreparedStatement stat = conn.prepareStatement(query);
 						stat.setString(1, name2);
 						ResultSet result = stat.executeQuery();
 						if(result.next()) {
-							Double gia2 = result.getDouble(1);						
+							Double gia2 = result.getDouble(1);	
+							Double discount2 = Double.parseDouble(giamgia_1.getText());
 							Double giaTien = gia2*price2*(1-discount2);
 							model.addRow(new Object [] {idnv2, name2, price2, discount2, giaTien} );
 						}
@@ -253,6 +279,9 @@ public class Order extends JPanel {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+				}
+							
+
 			}
 		});
 		
@@ -335,8 +364,7 @@ public class Order extends JPanel {
 				lblSum.setText("Price: "+sumString+"$");				
 				lblnv.setText(nv1);
 			}
-		});
-		
+		});		
 
 		tailai.setBounds(491, 373, 26, 21);
 		add(tailai);
@@ -351,13 +379,17 @@ public class Order extends JPanel {
 				banDAO ban_dao = new banDAO(conn);				
 				String id1 =  idbancb1.getSelectedItem().toString();
 				int id_ban = Integer.parseInt(id1);
-				int idOr = Integer.parseInt(lblIdOrder.getText());			
+				int idOr = Integer.parseInt(lblIdOrder.getText());		
+				int r = table.getRowCount();
+				
+				if(r==0) {
+					JOptionPane.showMessageDialog(null,	"Vui lòng Thêm Item.");
+				} else {
 					try {
-						for(int i=0 ; i<table.getRowCount(); i++) {							
+						for(int i=0 ; i<r; i++) {							
 							String hishName = (String) table.getValueAt(i, 1);
 							int quantyti = (int) table.getValueAt(i, 2);
-							Double discount = (Double) table.getValueAt(i, 3);
-							System.out.println(quantyti);
+							Double discount = (Double) table.getValueAt(i, 3);							
 								String query = "SELECT id FROM menu where ten_mon = ?";
 								PreparedStatement stat = conn.prepareStatement(query);
 								stat.setString(1, hishName);
@@ -385,16 +417,13 @@ public class Order extends JPanel {
 						String status = "Đang sữ dụng";
 						banDTO ban = new banDTO(id_ban, status);
 						ban_dao.suaBan(ban);
-					} catch (SQLException e1) {
+					} catch (SQLException |NoSuchAlgorithmException | InvalidKeySpecException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					} catch (NoSuchAlgorithmException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (InvalidKeySpecException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					} 
+				}
+				
+					
 			}
 		});
 		btnOrder.setFont(new Font("Monotype Corsiva", Font.BOLD, 50));
@@ -402,22 +431,21 @@ public class Order extends JPanel {
 		btnOrder.setBounds(502, 404, 163, 65);
 		add(btnOrder);
 		
-
-		
 		JButton xoa = new JButton(new ImageIcon(new ImageIcon("images/xoa.jpg").getImage().getScaledInstance(20, 20,20)));
 		xoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				int r = table.getSelectedRow();
-				model.removeRow(r);
-				
-				
+				if(r != -1) {
+					model.removeRow(r);						
+				}else if (r== -1) {
+					JOptionPane.showMessageDialog(null,	"Vui lòng chọn Item cần Xoá.");
+				}							
 			}
 		});
 		xoa.setBounds(491, 335, 26, 21);
 		add(xoa);
 		
-
 		this.setVisible(true);
 	}	
 	
@@ -546,8 +574,6 @@ public class Order extends JPanel {
 		monan_1.setBounds(101, 57, 120, 22);
 		panel_1.add(monan_1);
 		
-
-		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 324, 475, 145);
 		add(scrollPane);
@@ -572,14 +598,25 @@ public class Order extends JPanel {
 				String idnv = idnv_1.getSelectedItem().toString();				
 				String name = monan.getSelectedItem().toString();
 				int price = (int) soluong.getValue();
-				Double discount = Double.parseDouble(giamgia.getText());					
+				String discount1 =giamgia.getText();
+				if(discount1.equals(""))
+				{
+					JOptionPane.showMessageDialog(null,
+							"Vui lòng nhập Giảm giá.");
+					giamgia.requestFocusInWindow(); 					
+				} else if (price == 0) {
+					JOptionPane.showMessageDialog(null,
+							"Vui lòng nhập Số lượng.");
+					soluong.requestFocusInWindow(); 			
+				}else {
 					try {						
 						String query = "SELECT gia FROM menu where ten_mon = ?";
 						PreparedStatement stat = conn.prepareStatement(query);
 						stat.setString(1, name);
 						ResultSet result = stat.executeQuery();
 						if(result.next()) {
-							Double gia = result.getDouble(1);						
+							Double gia = result.getDouble(1);
+							Double discount = Double.parseDouble(giamgia.getText());
 							Double giaTien = gia*price*(1-discount);
 							model.addRow(new Object [] {idnv, name, price, discount, giaTien} );
 						}	
@@ -587,6 +624,7 @@ public class Order extends JPanel {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+				}
 			}
 		});
 		
@@ -597,8 +635,7 @@ public class Order extends JPanel {
 		panel_1.add(additem2);
 		JSpinner soluong_1 = new JSpinner();
 		soluong_1.setBounds(101, 103, 120, 26);
-		panel_1.add(soluong_1);
-		
+		panel_1.add(soluong_1);		
 
 		additem2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
@@ -606,18 +643,28 @@ public class Order extends JPanel {
 				String idnv2 = idnv_1.getSelectedItem().toString();				
 				String name2 = monan_1.getSelectedItem().toString();
 				int price2 = (int) soluong_1.getValue();
-				Double discount2 = Double.parseDouble(giamgia_1.getText());
-							
+				String discount3 =giamgia_1.getText();	
+				
+				if(discount3.equals(""))
+				{
+					JOptionPane.showMessageDialog(null,
+							"Vui lòng nhập Giảm giá.");
+					giamgia_1.requestFocusInWindow(); 					
+				} else if (price2 == 0) {
+					JOptionPane.showMessageDialog(null,
+							"Vui lòng nhập Số lượng.");
+					soluong_1.requestFocusInWindow(); 			
+				}else {}
 					try {
 						String query = "SELECT gia FROM menu where ten_mon = ?";
 						PreparedStatement stat = conn.prepareStatement(query);
 						stat.setString(1, name2);
 						ResultSet result = stat.executeQuery();
 						if(result.next()) {
-							Double gia2 = result.getDouble(1);						
+							Double gia2 = result.getDouble(1);
+							Double discount2 = Double.parseDouble(giamgia_1.getText());	
 							Double giaTien = gia2*price2*(1-discount2);
-							model.addRow(new Object [] {idnv2, name2, price2, discount2, giaTien} );
-						}
+							model.addRow(new Object [] {idnv2, name2, price2, discount2, giaTien} );						}
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -625,8 +672,6 @@ public class Order extends JPanel {
 			}
 		});
 		
-		
-
 		JTextArea lblnv = new JTextArea();
 		lblnv.setFont(new Font("Monospaced", Font.BOLD, 15));
 		lblnv.setBounds(492, 10, 186, 31);
@@ -686,9 +731,7 @@ public class Order extends JPanel {
 		add(lblIdOrder);
 		
 		int column = table.getColumnCount();
-		//int row = table.getRowCount();
-
-		
+		//int row = table.getRowCount();		
 		JButton tailai = new JButton(new ImageIcon(new ImageIcon("images/play.png").getImage().getScaledInstance(20, 20,20)));
 		tailai.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -704,8 +747,7 @@ public class Order extends JPanel {
 				lblSum.setText("Price: "+sumString+"$");				
 				lblnv.setText(nv1);
 			}
-		});
-		
+		});		
 
 		tailai.setBounds(491, 373, 26, 21);
 		add(tailai);
@@ -720,7 +762,11 @@ public class Order extends JPanel {
 				banDAO ban_dao = new banDAO(conn);				
 				String id1 =  idbancb1.getSelectedItem().toString();
 				int id_ban = Integer.parseInt(id1);
-				int idOr = Integer.parseInt(lblIdOrder.getText());			
+				int idOr = Integer.parseInt(lblIdOrder.getText());	
+				int r = table.getRowCount();
+				if(r == 0) {
+					JOptionPane.showMessageDialog(null,	"Vui lòng thêm Item.");
+				}else {
 					try {
 						for(int i=0 ; i<table.getRowCount(); i++) {							
 							String hishName = (String) table.getValueAt(i, 1);
@@ -737,34 +783,26 @@ public class Order extends JPanel {
 								}
 						}
 						String idnvor = idnv_1.getSelectedItem().toString();						
-						int idnv = nhanvien_dao.layIdNhanvienhoTen(idnvor);
-						System.out.println(idnvor);
-						System.out.println(idnv);
-						LocalDate ngayor = LocalDate.parse(lblDate.getText());
-						
+						int idnv = nhanvien_dao.layIdNhanvienhoTen(idnvor);							
+						LocalDate ngayor = LocalDate.parse(lblDate.getText());						
 						String gioor = lblTime.getText();
 						int column = table.getColumnCount();				
 						double sum = 0;
 						for(int i=0 ; i<table.getRowCount(); i++) {
 							Double tam = (double) table.getValueAt(i, column-1);					
 							sum = sum + tam;					
-						}
-						
+						}						
 						ordersDTO order = new ordersDTO(idnv, ngayor, gioor, sum);
 						orders_dao.themOrders(order);						
 						String status = "Đang sữ dụng";
 						banDTO ban = new banDTO(id_ban, status);
 						ban_dao.suaBan(ban);
-					} catch (SQLException e1) {
+					} catch (SQLException |NoSuchAlgorithmException | InvalidKeySpecException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					} catch (NoSuchAlgorithmException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (InvalidKeySpecException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					} 
+				}
+					
 			}
 		});
 		btnOrder.setFont(new Font("Monotype Corsiva", Font.BOLD, 50));
@@ -772,25 +810,22 @@ public class Order extends JPanel {
 		btnOrder.setBounds(502, 404, 163, 65);
 		add(btnOrder);
 		
-
-		
 		JButton xoa = new JButton(new ImageIcon(new ImageIcon("images/xoa.jpg").getImage().getScaledInstance(20, 20,20)));
 		xoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				int r = table.getSelectedRow();
-				model.removeRow(r);
-				
-				
+				if(r != -1) {
+					model.removeRow(r);						
+				}else if (r== -1) {
+					JOptionPane.showMessageDialog(null,	"Vui lòng chọn Item cần Xoá.");
+				}
 			}
 		});
 		xoa.setBounds(491, 335, 26, 21);
-		add(xoa);
-		
-
+		add(xoa);		
 		this.setVisible(true);
 	}	
-	
 	public int getIdOrder() throws SQLException, ClassNotFoundException, IOException {
 		int hish = 0;
 		String query = "call get_new_order(@new_id)";

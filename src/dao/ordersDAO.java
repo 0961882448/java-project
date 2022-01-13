@@ -39,9 +39,7 @@ public class ordersDAO {
 			current_orders = new ordersDTO(id, idnv, ngayOrders,timeOrders,price);
 		}
 		return current_orders;	
-	}
-	
-	
+	}	
 	
 	public Double getGiaOrder(int u) throws SQLException {
 		Double gia = null;
@@ -70,7 +68,7 @@ public class ordersDAO {
 	
 	public void getOrderngaytable(JTable tab, DefaultTableModel df,String u) throws SQLException {			
 		df = (DefaultTableModel) tab.getModel();		
-		String query = "SELECT * FROM orders where ngay_order = ?;";
+		String query = "SELECT * FROM orders where ngay_order = ?;" ;
 		PreparedStatement stat = conn.prepareStatement(query);
 		stat.setString(1, u);
 		ResultSet result = stat.executeQuery();		
@@ -117,8 +115,7 @@ public class ordersDAO {
 			stat.setString(3, gio);
 			stat.setDouble(4, gia);
 			int p = stat.executeUpdate();
-			if (p == 1){
-				System.out.println("Insert new record");
+			if (p == 1){				
 				return true;
 			}
 		} catch (SQLException e) {
@@ -127,17 +124,6 @@ public class ordersDAO {
 		}
 		return false;	
 	}
-	
-//	public int getIdOrder(Integer hish) throws SQLException {		
-//		String query = "call call new_orders(?)";
-//		PreparedStatement stat = conn.prepareStatement(query);
-//		stat.setInt(1, hish);
-//		ResultSet result = stat.executeQuery();
-//		if (result.next()){
-//			hish = result.getInt(1);
-//		}			
-//		return hish;		
-//	}
 	
 	public void suaOrders(ordersDTO u) throws SQLException, NoSuchAlgorithmException, InvalidKeySpecException {
 		int idnv = u.getIdnv();
@@ -149,8 +135,7 @@ public class ordersDAO {
 		stat.setInt(1, idnv);
 		stat.setString(2, ngay);
 		stat.setString(3, gio);
-		stat.setDouble(4, gia);
-		
+		stat.setDouble(4, gia);		
 		stat.execute();
 	}
 	
@@ -160,11 +145,9 @@ public class ordersDAO {
 		stat.setInt(1, id);
 		stat.execute();
 		return false;		
-	}
-	
+	}	
 
-	public ArrayList<String> getHish() throws ClassNotFoundException, IOException, SQLException{
-		
+	public ArrayList<String> getHish() throws ClassNotFoundException, IOException, SQLException{		
 		DBConnection.init("database.properties");	
 		Connection conn = DBConnection.getConnection();
 		String query = "Select ten_mon from menu";

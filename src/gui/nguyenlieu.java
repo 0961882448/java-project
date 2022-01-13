@@ -80,7 +80,7 @@ public class nguyenlieu extends JPanel {
 				return columnEditables[column];
 			}
 		});
-		nguyenlieu_dao.getNhanVientable(table, model);
+		nguyenlieu_dao.getNguyenLieutable(table, model);
 		
 		scrollPane.setViewportView(table);
 		
@@ -113,7 +113,7 @@ public class nguyenlieu extends JPanel {
 					DefaultTableModel m = (DefaultTableModel)table.getModel();
 					m.getDataVector().removeAllElements();
 					m.fireTableDataChanged();
-					nguyenlieu_dao.getNhanVientable(table, model);
+					nguyenlieu_dao.getNguyenLieutable(table, model);
 				} catch (HeadlessException | ClassNotFoundException | IOException | SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -131,24 +131,26 @@ public class nguyenlieu extends JPanel {
 		btnsua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int r = table.getSelectedRow();
-				
-				int id = (int) table.getValueAt(r, 0);
-				String ten = (String) table.getValueAt(r, 1);
-				double gia = (Double) table.getValueAt(r, 2);
-				int sl = (int) table.getValueAt(r, 3);
-				String ngayString = (String) table.getValueAt(r, 4);
-				LocalDate ngay = LocalDate.parse(ngayString);
-				
-				nguyenlieuDTO neww = new nguyenlieuDTO(id,ten, gia, sl, ngay);
-				try {
-					nguyenlieu_dao.suaNguyenLieu(neww);
-					DefaultTableModel m = (DefaultTableModel)table.getModel();
-					m.getDataVector().removeAllElements();
-					m.fireTableDataChanged();
-					nguyenlieu_dao.getNhanVientable(table, model);
-				} catch (NoSuchAlgorithmException | InvalidKeySpecException | SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if (r != -1) {
+					int id = (int) table.getValueAt(r, 0);
+					String ten = (String) table.getValueAt(r, 1);
+					double gia = (Double) table.getValueAt(r, 2);
+					int sl = (int) table.getValueAt(r, 3);
+					String ngayString = (String) table.getValueAt(r, 4);
+					LocalDate ngay = LocalDate.parse(ngayString);					
+					nguyenlieuDTO neww = new nguyenlieuDTO(id,ten, gia, sl, ngay);
+					try {
+						nguyenlieu_dao.suaNguyenLieu(neww);
+						DefaultTableModel m = (DefaultTableModel)table.getModel();
+						m.getDataVector().removeAllElements();
+						m.fireTableDataChanged();
+						nguyenlieu_dao.getNguyenLieutable(table, model);
+					} catch (NoSuchAlgorithmException | InvalidKeySpecException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} else if (r== -1) {
+					JOptionPane.showMessageDialog(null,	"Vui lòng chọn nguyên liệu cần Sửa.");
 				}
 			}
 		});
@@ -163,53 +165,24 @@ public class nguyenlieu extends JPanel {
 		btnxoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int r = table.getSelectedRow();
-				int id = (int) table.getValueAt(r, 0);
-				try {
-					nguyenlieu_dao.xoaNguyenLieu(id);
-					DefaultTableModel m = (DefaultTableModel)table.getModel();
-					m.getDataVector().removeAllElements();
-					m.fireTableDataChanged();
-					nguyenlieu_dao.getNhanVientable(table, model);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if(r != -1) {
+					int id = (int) table.getValueAt(r, 0);
+					try {
+						nguyenlieu_dao.xoaNguyenLieu(id);
+						DefaultTableModel m = (DefaultTableModel)table.getModel();
+						m.getDataVector().removeAllElements();
+						m.fireTableDataChanged();
+						nguyenlieu_dao.getNguyenLieutable(table, model);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}else if (r == -1) {
+					JOptionPane.showMessageDialog(null,	"Vui lòng chọn nguyên liệu cần Xoá.");
 				}
 			}
 		});
 		btnxoa.setBounds(545, 110, 150, 40);
 		add(btnxoa);
-		
-//	      table.addMouseListener(new MouseListener(){
-//	  		@Override
-//	  		public void mouseClicked(MouseEvent e) {
-//	  			// TODO Auto-generated method stub
-//	  			int r = table.getSelectedRow();
-//	  			int r_model = -1;
-//	  			if (r != -1){
-//	  				r_model = table.convertRowIndexToModel(r);
-//	  			}
-//	  			tfid.setText(String.valueOf(table.getValueAt(r_model,0)));
-//	  			tften.setText(String.valueOf(table.getValueAt(r_model,1)));
-//	  			tfgia.setText(String.valueOf(table.getValueAt(r_model,2)));
-//	  			tfsl.setText(String.valueOf(table.getValueAt(r_model,3)));
-//	  			tfngay.setText(String.valueOf(table.getValueAt(r_model,4)));
-//	  		}
-//	  		@Override
-//	  		public void mouseEntered(MouseEvent e) {
-//	  			// TODO Auto-generated method stub	  			
-//	  		}
-//	  		@Override
-//	  		public void mouseExited(MouseEvent e) {
-//	  			// TODO Auto-generated method stub	  			
-//	  		}
-//	  		@Override
-//	  		public void mousePressed(MouseEvent e) {
-//	  			// TODO Auto-generated method stub	  			
-//	  		}
-//	  		@Override
-//	  		public void mouseReleased(MouseEvent e) {
-//	  			// TODO Auto-generated method stub	  			
-//	  		}	      	  
-//	        });
 	}
 }

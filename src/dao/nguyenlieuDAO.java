@@ -19,9 +19,6 @@ public class nguyenlieuDAO {
 	}
 	
 	public Double giaNguyenLieu() throws SQLException {	
-		
-		 
-		
 		Double sum = 0.0 ;
 		String query = "select gia, so_luong from nguyen_lieu;";
 		PreparedStatement stat = conn.prepareStatement(query);		
@@ -61,7 +58,7 @@ public class nguyenlieuDAO {
 		return false;	
 	}
 	
-	public void getNhanVientable(JTable tab, DefaultTableModel df) throws SQLException {			
+	public void getNguyenLieutable(JTable tab, DefaultTableModel df) throws SQLException {			
 		df = (DefaultTableModel) tab.getModel();		
 		String query = "SELECT * FROM nguyen_lieu;";
 		PreparedStatement stat = conn.prepareStatement(query);

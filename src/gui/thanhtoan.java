@@ -23,6 +23,8 @@ import utilities.DBConnection;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Font;
+import java.awt.HeadlessException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -137,14 +139,19 @@ public class thanhtoan extends JPanel {
 				
 				DefaultTableModel model = (DefaultTableModel) table_1.getModel();
 				int r = table_1.getSelectedRow();
-				int id = (int) table_1.getValueAt(r, 0);
-				try {
-					item_dao.xoaItem(id);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if(r != -1) {
+					int id = (int) table_1.getValueAt(r, 0);
+					try {
+						item_dao.xoaItem(id);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					model.removeRow(r);
+				}else if (r == -1) {
+					JOptionPane.showMessageDialog(null,"Vui lòng chọn món ăn cần xoá.");
 				}
-				model.removeRow(r);
+
 			}
 		});
 		btnXoa.setBounds(248, 304, 40, 40);
@@ -154,7 +161,7 @@ public class thanhtoan extends JPanel {
 	  		@Override
 	  		public void mouseClicked(MouseEvent e) {
 	  			// TODO Auto-generated method stub
-	  			int r = table.getSelectedRow();		
+	  			int r = table.getSelectedRow();	  			
 	  			String ban = String.valueOf(table.getValueAt(r,0));	  			
 	  			int idban = Integer.parseInt(ban);				
 	  				DefaultTableModel df = (DefaultTableModel) table_1.getModel();		
@@ -191,9 +198,7 @@ public class thanhtoan extends JPanel {
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}
-
-	  			
+					}  			
 	  		}
 	  		@Override
 	  		public void mouseEntered(MouseEvent e) {
@@ -217,12 +222,7 @@ public class thanhtoan extends JPanel {
 	      
 			JButton btnthanhtoan = new JButton(new ImageIcon(new ImageIcon("images/thantoan.png").getImage().getScaledInstance(85, 86,20)));
 			btnthanhtoan.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null,"Thanh toán thành công thành công");
-//					int r = table.getSelectedRow();		
-//		  			String ban = String.valueOf(table.getValueAt(r,0));
-//		  			int idban = Integer.parseInt(ban);
-//		  			System.out.println(idban);
+				public void actionPerformed(ActionEvent e) {					
 					int idban = getIDBan();
 		  			String statu = "trống";
 		  			banDTO upde = new banDTO(idban, statu);
@@ -232,20 +232,14 @@ public class thanhtoan extends JPanel {
 						m.getDataVector().removeAllElements();
 						m.fireTableDataChanged();
 						ban_dao.getbanDSDtable(table, model);
-						
-//						int n = table.getSelectedRow();	
-//						String idString = String.valueOf(table.getValueAt(n, 0));
-//						int idBan = Integer.parseInt(idString);
-//						System.out.println(idBan);
-						
 						DefaultTableModel m1 = (DefaultTableModel)table_1.getModel();
 						m1.getDataVector().removeAllElements();
 						m1.fireTableDataChanged();
+						JOptionPane.showMessageDialog(null,"Thanh toán thành công");
 					} catch (NoSuchAlgorithmException | InvalidKeySpecException | SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}
-		  			
+					}		  			
 				}
 			});
 			btnthanhtoan.setForeground(Color.GREEN);
@@ -257,36 +251,46 @@ public class thanhtoan extends JPanel {
 			btnin.setBounds(513, 363, 85, 86);
 			add(btnin);			
 			
-			JButton btnThem = new JButton((Icon) null);
+			JButton btnThem = new JButton(new ImageIcon(new ImageIcon("images/themmonan.jpg").getImage().getScaledInstance(80, 80,20)));
 			btnThem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int r = table.getSelectedRow();		
-					String ban = String.valueOf(table.getValueAt(r,0));
-					int idban = Integer.parseInt(ban);
-					int m = table_1.getSelectedRow();							
-					int idOr = (int) table_1.getValueAt(m,1);
-					try {
-						JOptionPane.showMessageDialog(null,new Order(idban, idOr));						
-					} catch (ClassNotFoundException | SQLException | IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					int r = table.getSelectedRow();					
+					if(r != -1) {	
+						String ban = String.valueOf(table.getValueAt(r,0));	  			
+			  			int idban = Integer.parseInt(ban);
+			  			int idor = 0;						
+		  				String query = "call new_idOrder(?);";							
+							try {								
+								PreparedStatement stat= conn.prepareStatement(query);
+								stat = conn.prepareStatement(query);
+								stat.setInt(1, idban);
+				  				ResultSet result = stat.executeQuery();	
+				  				if(result.next()) {
+				  					idor = result.getInt(2);
+				  				}
+				  				JOptionPane.showMessageDialog(null,new Order(idban, idor));	
+							} catch (SQLException | HeadlessException | ClassNotFoundException | IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();							} 
+					} else if (r == -1) {
+						JOptionPane.showMessageDialog(null,"Vui lòng chọn bàn cần thêm.");
+					} 	
 				}
 			});
 			btnThem.setBounds(305, 304, 40, 40);
-			add(btnThem);
-	
+			add(btnThem);	
 	}
 	public int getIDBan() {
-		int r = table.getSelectedRow();		
-		String ban = String.valueOf(table.getValueAt(r,0));
-		int idban = Integer.parseInt(ban);
-		System.out.println(idban);				
-		return idban;
-	}
-	public int getIDor() {
-		int m = table_1.getSelectedRow();							
-		int idOr = (int) table_1.getValueAt(m,1);		
-		return idOr;
+		int r = table.getSelectedRow();
+		int idban = 0;
+		if(r!= -1) {
+			String ban = String.valueOf(table.getValueAt(r,0));
+			idban = Integer.parseInt(ban);
+			return idban;
+		} else if ( r == -1) {
+			JOptionPane.showMessageDialog(null,"Vui lòng chọn bàn cần thanh toán.");
+		}
+		return idban;						
+		
 	}
 }

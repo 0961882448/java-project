@@ -110,20 +110,25 @@ public class menu extends JPanel {
 		btnsua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int r = table.getSelectedRow();
-				int id = (int)(table.getValueAt(r,0));
-				String ten = (String)(table.getValueAt(r,1));
-				double gia = (Double)(table.getValueAt(r,2));		
-				menuDTO neww = new menuDTO(id,ten, gia);
-				try {					
-					menu_dao.suaMenu(neww);					
-					DefaultTableModel m = (DefaultTableModel)table.getModel();
-					m.getDataVector().removeAllElements();
-					m.fireTableDataChanged();
-					menu_dao.getmenutable(table, model);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if(r != -1) {
+					int id = (int)(table.getValueAt(r,0));
+					String ten = (String)(table.getValueAt(r,1));
+					double gia = (Double)(table.getValueAt(r,2));		
+					menuDTO neww = new menuDTO(id,ten, gia);
+					try {					
+						menu_dao.suaMenu(neww);					
+						DefaultTableModel m = (DefaultTableModel)table.getModel();
+						m.getDataVector().removeAllElements();
+						m.fireTableDataChanged();
+						menu_dao.getmenutable(table, model);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}else if (r == -1) {
+					JOptionPane.showMessageDialog(null,"Vui lòng chọn món ăn cần Sửa.");
 				}
+
 			}
 		});
 		btnsua.setBounds(545, 60, 150, 40);
@@ -137,54 +142,24 @@ public class menu extends JPanel {
 		btnxoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int r = table.getSelectedRow();
-				int id = (int)(table.getValueAt(r,0));
-				System.out.println(r);
-				try {
-					menu_dao.xoaMenu(id);
-					DefaultTableModel m = (DefaultTableModel)table.getModel();
-					m.getDataVector().removeAllElements();
-					m.fireTableDataChanged();
-					menu_dao.getmenutable(table, model);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				if(r != -1) {
+					int id = (int)(table.getValueAt(r,0));
+					try {
+						menu_dao.xoaMenu(id);
+						DefaultTableModel m = (DefaultTableModel)table.getModel();
+						m.getDataVector().removeAllElements();
+						m.fireTableDataChanged();
+						menu_dao.getmenutable(table, model);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} else if (r== -1) {
+					JOptionPane.showMessageDialog(null,"Vui lòng chọn món ăn cần Xoá .");
+				}				
 			}
 		});
 		btnxoa.setBounds(545, 110, 150, 40);
 		add(btnxoa);
-		
-//		 table.addMouseListener(new MouseListener(){
-//		  		@Override
-//		  		public void mouseClicked(MouseEvent e) {
-//		  			// TODO Auto-generated method stub
-//		  			int r = table.getSelectedRow();
-//		  			int r_model = -1;
-//		  			if (r != -1){
-//		  				r_model = table.convertRowIndexToModel(r);
-//		  			}
-//		  			tfid.setText(String.valueOf(table.getValueAt(r_model,0)));
-//		  			tften.setText(String.valueOf(table.getValueAt(r_model,1)));
-//		  			tfgia.setText(String.valueOf(table.getValueAt(r_model,2)));
-//		  		}
-//		  		@Override
-//		  		public void mouseEntered(MouseEvent e) {
-//		  			// TODO Auto-generated method stub	  			
-//		  		}
-//		  		@Override
-//		  		public void mouseExited(MouseEvent e) {
-//		  			// TODO Auto-generated method stub	  			
-//		  		}
-//		  		@Override
-//		  		public void mousePressed(MouseEvent e) {
-//		  			// TODO Auto-generated method stub	  			
-//		  		}
-//		  		@Override
-//		  		public void mouseReleased(MouseEvent e) {
-//		  			// TODO Auto-generated method stub	  			
-//		  		}	      	  
-//		        });
-		
-
 	}
 }

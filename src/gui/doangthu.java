@@ -21,6 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 @SuppressWarnings("serial")
 public class doangthu extends JPanel {
@@ -59,6 +60,9 @@ public class doangthu extends JPanel {
 
 		
 		JButton btnThu = new JButton("TỔNG THU");
+		btnThu.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnThu.setForeground(new Color(255, 255, 0));
+		btnThu.setBackground(new Color(0, 0, 205));
 		btnThu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nam = CBnam.getSelectedItem().toString();
@@ -86,6 +90,9 @@ public class doangthu extends JPanel {
 		add(btnThu);
 		
 		JButton btnLoiNhuan = new JButton("LỢI NHUẬN");
+		btnLoiNhuan.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnLoiNhuan.setForeground(new Color(255, 255, 0));
+		btnLoiNhuan.setBackground(new Color(0, 0, 205));
 		btnLoiNhuan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nam = CBnam.getSelectedItem().toString();
@@ -111,6 +118,9 @@ public class doangthu extends JPanel {
 		add(btnLoiNhuan);
 		
 		JButton btnChi = new JButton("TỔNG CHI");
+		btnChi.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnChi.setForeground(new Color(255, 255, 0));
+		btnChi.setBackground(new Color(0, 0, 205));
 		btnChi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nam = CBnam.getSelectedItem().toString();
@@ -129,16 +139,11 @@ public class doangthu extends JPanel {
 					panel.repaint();
 				} catch (SQLException e1) {					
 					e1.printStackTrace();
-				}
-				
+				}				
 			}
 		});
 		btnChi.setBounds(195, 418, 140, 51);
 		add(btnChi);
-		
-		
-
-		
 	}
 	
 	
@@ -154,8 +159,7 @@ public class doangthu extends JPanel {
 			if (result.next()){
 				do {
 					Double gia = result.getDouble(1);				
-					dataset.setValue(gia, "Giá tiền", "T "+i);
-					System.out.println(i);
+					dataset.setValue(gia, "Giá tiền", "T "+i);					
 				} while (result.next());
 				}else if (result.next() == false) {
 					int gianull = 0; 
@@ -189,8 +193,7 @@ public class doangthu extends JPanel {
 			if (result.next()){
 				do {
 					Double gia = result.getDouble(1);				
-					dataset.setValue(gia, "Giá tiền", "T "+i);
-					System.out.println(i);
+					dataset.setValue(gia, "Giá tiền", "T "+i);					
 				} while (result.next());
 				}else if (result.next() == false) {
 					int gianull = 0; 
@@ -243,8 +246,7 @@ public class doangthu extends JPanel {
 				if (result.next()){
 					do {
 						Double gia = result.getDouble(1);				
-						dataset.setValue(gia, "Giá tiền", "T "+i);
-						System.out.println(i);
+						dataset.setValue(gia, "Giá tiền", "T "+i);						
 					} while (result.next());
 					}else if (result.next() == false) {
 						int gianull = 0; 

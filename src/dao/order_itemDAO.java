@@ -50,8 +50,7 @@ public class order_itemDAO {
 			stat.setInt(5, idb);
 			stat.executeUpdate();
 			
-			//stat.execute();
-			//stat.executeUpdate();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

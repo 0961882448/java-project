@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -112,8 +111,15 @@ public class NhanVien extends JPanel {
 		btnadd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showInputDialog(new DKNhanVien());
-				
-				
+				DefaultTableModel m = (DefaultTableModel)table.getModel();
+				m.getDataVector().removeAllElements();
+				m.fireTableDataChanged();
+				try {
+					nhanvien.getNhanVientable(table,model);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}		
 		}});
 		btnadd.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		btnadd.setBounds(21, 422, 141, 47);
@@ -137,6 +143,8 @@ public class NhanVien extends JPanel {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}					
+				}	else if (r == -1) {
+					JOptionPane.showMessageDialog(null,	"Vui lòng chọn nhân viên cần Xoá.");
 				}				
 			}
 		});
@@ -156,48 +164,24 @@ public class NhanVien extends JPanel {
 					String qu = tf_quyen.getText();
 					int lu = Integer.parseInt(tf_luong.getText());					
 					NhanVienDTO update = new NhanVienDTO(ma,name, date, user, pas, qu, lu);
-					nhanvien.suaNhanvien(update);		
+					nhanvien.suaNhanvien(update);						
 					DefaultTableModel m = (DefaultTableModel)table.getModel();
 					m.getDataVector().removeAllElements();
 					m.fireTableDataChanged();
 					nhanvien.getNhanVientable(table,model);
-				} catch (SQLException e1) {
+				} catch (SQLException | NoSuchAlgorithmException | InvalidKeySpecException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} catch (NoSuchAlgorithmException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-				} catch (InvalidKeySpecException e1) {
-					// TODO Auto-generated catch block
-						e1.printStackTrace();
-				}
+				} 
 		}});
 		btnupdate.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		btnupdate.setBounds(230, 422, 131, 47);
 		add(btnupdate);
 		
-		JButton tailai = new JButton(new ImageIcon(new ImageIcon("images/tailai.png").getImage().getScaledInstance(30, 40,20)));
-		tailai.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					DefaultTableModel m = (DefaultTableModel)table.getModel();
-					m.getDataVector().removeAllElements();
-					m.fireTableDataChanged();
-					nhanvien.getNhanVientable(table,model);					
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}	
-			}
-		});
-		tailai.setBounds(634, 422, 61, 47);
-		add(tailai);
-		
 		lblNewLabel = new JLabel("Mã NV");
 		lblNewLabel.setBounds(10, 312, 97, 25);
 		add(lblNewLabel);
-		 
-		
+		 		
 		lblHTn = new JLabel("Họ Tên");
 		lblHTn.setBounds(108, 314, 97, 25);
 		add(lblHTn);
@@ -250,8 +234,6 @@ public class NhanVien extends JPanel {
 		tf_pass = new JPasswordField();
 		tf_pass.setBounds(397, 349, 97, 33);
 		add(tf_pass);
-		
-
 	      table.addMouseListener(new MouseListener(){
 	  		@Override
 	  		public void mouseClicked(MouseEvent e) {

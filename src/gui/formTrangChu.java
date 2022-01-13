@@ -48,12 +48,7 @@ public class formTrangChu extends JFrame {
 	public <Dim> formTrangChu() {
 		getContentPane().setLayout(null);
 		this.setTitle("Quản lý nhà hàng");
-		this.setVisible(true);
-
-		//String ngay = java.time.LocalDate.now().toString();		
-		//DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-		//Calendar cal = Calendar.getInstance();
-		//String gio = dateFormat.format(cal.getTime());	
+		this.setVisible(true);	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 650);
 		contentPane = new JPanel();
@@ -93,14 +88,11 @@ public class formTrangChu extends JFrame {
 		btnBan.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnBan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
 				panel.getParent().remove(panelChinh);				
 				panel.getParent().revalidate();		
 				try {
 					panelChinh = new ban(); 
-					panel.getParent().add(panelChinh);	
-					
+					panel.getParent().add(panelChinh);						
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
 					e1.printStackTrace();
@@ -122,9 +114,6 @@ public class formTrangChu extends JFrame {
 		btnOrder.addActionListener(new ActionListener() {
 			@Override
 		public void actionPerformed(ActionEvent e) {
-
-				// Load panel1 vao vi tri cua contentPanel	
-				
 				panel.getParent().remove(panelChinh);
 				panel.getParent().revalidate();		
 				try {					
@@ -141,14 +130,12 @@ public class formTrangChu extends JFrame {
 		JButton btnMenu = new JButton("MENU");
 		btnMenu.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnMenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed(ActionEvent e) {				
 				panel.getParent().remove(panelChinh);
 				panel.getParent().revalidate();		
 				try {					
 					panelChinh = new menu();
-					panel.getParent().add(panelChinh);	
-					
+					panel.getParent().add(panelChinh);						
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
 					e1.printStackTrace();
@@ -214,8 +201,7 @@ public class formTrangChu extends JFrame {
 				panel.getParent().revalidate();		
 				try {					
 					panelChinh = new Don();
-					panel.getParent().add(panelChinh);	
-					
+					panel.getParent().add(panelChinh);						
 				} catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block					
 					e1.printStackTrace();
@@ -243,22 +229,4 @@ public class formTrangChu extends JFrame {
 		panel_1.add(lblNewLabel);
 		
 	}
-//	@Override
-//	public void actionPerformed(ActionEvent e) {
-//		// TODO Auto-generated method stub
-//		//System.out.println("Button thanh toan");
-//		panel.getParent().remove(panelChinh);
-//		panel.getParent().revalidate();	
-//		try {					
-//			panelThanhtoan = new thanhtoan();
-//			panelChinh = new thanhtoan();			
-//			panel.getParent().add(panelChinh);	
-//			//System.out.println(panelThanhtoan.getIDBan());
-//			
-//		} catch (ClassNotFoundException | SQLException | IOException e1) {
-//			// TODO Auto-generated catch block					
-//			e1.printStackTrace();
-//		}
-//		panel.getParent().repaint();
-//	}
 }

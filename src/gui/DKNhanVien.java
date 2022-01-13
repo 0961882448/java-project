@@ -116,20 +116,13 @@ public class DKNhanVien extends JPanel {
 		
 		JButton btnSave = new JButton("SIGN IN");
 		btnSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
+			public void actionPerformed(ActionEvent arg0) {				
 				try {
 					if(RegisterData()) {
 							
 							JOptionPane.showMessageDialog(null,"Thêm nhân viên thành công");
 					}
-				} catch (HeadlessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) {
-					// TODO Auto-generated catch block
-				e.printStackTrace();
-				} catch (InvalidKeySpecException e) {
+				} catch (HeadlessException |NoSuchAlgorithmException |InvalidKeySpecException | SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -150,7 +143,7 @@ public class DKNhanVien extends JPanel {
 		add(txtConfirmPassword);
 	}
 	
-	private Boolean RegisterData() throws NoSuchAlgorithmException, InvalidKeySpecException
+	private Boolean RegisterData() throws NoSuchAlgorithmException, InvalidKeySpecException, SQLException
 	{
 		String strHoTen = txthoten.getText();
 		LocalDate strNgaySinh = LocalDate.parse(txtngaysinh.getText()) ;
@@ -223,26 +216,15 @@ public class DKNhanVien extends JPanel {
 		NhanVienDTO new_user = new NhanVienDTO(strHoTen,strNgaySinh,strUsername, strPassword,strQuyen,strluongg);
 		try {
 			DBConnection.init("database.properties");
-			try {
 				Connection conn = DBConnection.getConnection();
-				NhanVienDAO user_dao = new NhanVienDAO(conn);
-				
+				NhanVienDAO user_dao = new NhanVienDAO(conn);				
 				status = user_dao.themNhanVien(new_user);
 				resetRegistrationForm();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-				
+		} 
 		return status;
-
 	}
 	
 	public void resetRegistrationForm(){

@@ -102,12 +102,11 @@ public class Don extends JPanel {
 			}
 		});
 		btntailai.setBounds(10, 119, 46, 46);
-		add(btntailai);
-		
+		add(btntailai);		
 	}
 	
 	public ArrayList<String> getNgay() throws ClassNotFoundException, IOException, SQLException{		
-		String query = "Select ngay_order from orders;";
+		String query = "Select ngay_order from orders Group by (ngay_order);";
 		PreparedStatement stat = conn.prepareStatement(query);		
 		ResultSet result = stat.executeQuery();		
 		boolean check = false;
